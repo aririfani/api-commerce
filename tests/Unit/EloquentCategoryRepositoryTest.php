@@ -82,6 +82,17 @@ class EloquentCategoryRepositoryTest extends TestCase
         $this->assertCount(2, $data);
     }
 
+    /**
+     * test delete category by id
+     */
+    public function test_delete_category_by_id(): void
+    {
+        $category   = Category::factory()->create();
+        $data       = $this->repository->delete($category->id);
+
+        $this->assertTrue($data);
+    }
+
     public function tearDown(): void
     {
         parent::tearDown();
