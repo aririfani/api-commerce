@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Models\Category;
 use App\Repositories\Category\EloquentCategoryRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 class EloquentCategoryRepositoryTest extends TestCase
 {
@@ -67,11 +68,23 @@ class EloquentCategoryRepositoryTest extends TestCase
         $this->assertEquals($category->id, $data->id);
     }
 
+    /**
+     * test get all category
+     */
+    public function test_get_all_category(): void
+    {
+        Category::factory()->count(2)->create();
+        $data = $this->repository->getAll();
+
+        $this->assertInstanceOf(Collection::class, $data);
+    }
+
     public function tearDown(): void
     {
         parent::tearDown();
 
         unset($this->category);
         unset($this->repository);
+        $this->artisan('migrate:refresh');
     }
 }
