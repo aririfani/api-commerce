@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Category;
 use App\Repositories\Category\EloquentCategoryRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Artisan;
 
 class EloquentCategoryRepositoryTest extends TestCase
 {
@@ -19,6 +20,7 @@ class EloquentCategoryRepositoryTest extends TestCase
 
         $this->category     = app(Category::class);
         $this->repository   = app(EloquentCategoryRepository::class, [$this->category]);
+        Artisan::call('migrate:refresh');
     }
 
     /**
@@ -77,6 +79,7 @@ class EloquentCategoryRepositoryTest extends TestCase
         $data = $this->repository->getAll();
 
         $this->assertInstanceOf(Collection::class, $data);
+        $this->assertCount(2, $data);
     }
 
     public function tearDown(): void
@@ -85,6 +88,5 @@ class EloquentCategoryRepositoryTest extends TestCase
 
         unset($this->category);
         unset($this->repository);
-        $this->artisan('migrate:refresh');
     }
 }
