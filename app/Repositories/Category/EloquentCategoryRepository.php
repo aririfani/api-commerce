@@ -45,4 +45,13 @@ class EloquentCategoryRepository implements CategoryRepository
 
         return $this->model->find($id);
     }
+
+    /**
+     * @param int $id
+     * @return Model
+     */
+    public function findById(int $id) : Model
+    {
+        return $this->model->where('id','=', $id)->first();
+    }
 }
