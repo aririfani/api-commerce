@@ -57,6 +57,15 @@ class EloquentCategoryRepository implements CategoryRepository
     }
 
     /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id) : bool
+    {
+        return $this->model->where('id', '=', $id)->delete();
+    }
+
+    /**
      * @return Collection
      */
     public function getAll(): Collection

@@ -28,4 +28,10 @@ interface CategoryRepository
      * @param Collection
      */
     public function getAll(): Collection;
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id) : bool;
 }
