@@ -2,7 +2,9 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
+use App\Models\Category;
+use App\Repositories\Category\EloquentCategoryRepository;
 
 class EloquentCategoryRepositoryTest extends TestCase
 {
@@ -14,9 +16,8 @@ class EloquentCategoryRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->category = new Category(['name' => 'Food', 'enable' => true]);
-        $this->categoryRepositoryMock = $this->createMock(CategoryRepository::class);
-        $this->repository = new EloquentCatetgoryRepository($this->categoryRepository);
+        $this->category     = app(Category::class);
+        $this->repository   = app(EloquentCategoryRepository::class, [$this->category]);
     }
 
     /**
@@ -24,21 +25,15 @@ class EloquentCategoryRepositoryTest extends TestCase
      */
     public function test_create_category_success(): void
     {
-        $this->categoryRepositoryMock->expects($this->once())
-            ->method('create')
-            ->with([
-                'name' => 'food',
-                'enable' => true
-            ])
-            ->willReturn($this->category);
+        $category = Category::factory()->make();
 
-        $result = $this->repository->create([
-            'name' => 'food',
-            'enable' => true
+        $data = $this->repository->create([
+            'name'      => $category->name,
+            'enable'    => $category->enable
         ]);
 
-        $this->assertEquals('food', $result->name);
-        $this->assertEquals('enable', $result->enable);
+        $this->assertEquals($category->name, $data->name);
+        $this->assertEquals($category->enable, $data->enable);
     }
 
     public function tearDown(): void
@@ -46,7 +41,6 @@ class EloquentCategoryRepositoryTest extends TestCase
         parent::tearDown();
 
         unset($this->category);
-        unset($this->categoryRepositoryMock);
         unset($this->repository);
     }
 }
