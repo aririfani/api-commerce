@@ -53,6 +53,20 @@ class EloquentCategoryRepositoryTest extends TestCase
         $this->assertEquals($category->id, $data->id);
     }
 
+    /**
+     * test find by id success
+     */
+    public function test_find_by_id_success(): void
+    {
+        $category = Category::factory()->create();
+
+        $data = $this->repository->findById($category->id);
+
+        $this->assertEquals($category->name, $data->name);
+        $this->assertEquals($category->enable, $data->enable);
+        $this->assertEquals($category->id, $data->id);
+    }
+
     public function tearDown(): void
     {
         parent::tearDown();
