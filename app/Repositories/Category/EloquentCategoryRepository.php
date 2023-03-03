@@ -29,8 +29,20 @@ class EloquentCategoryRepository implements CategoryRepository
      * @param array $param
      * @return Model
      */
-    public function create(array $params)
+    public function create(array $params) : Model
     {
         return $this->model->create($params);
+    }
+
+    /**
+     * @param array $param
+     * @param int $id
+     * @return Model
+     */
+    public function update(array $params, int $id) : Model
+    {
+        $this->model->where('id', '=', $id)->update($params);
+
+        return $this->model->find($id);
     }
 }

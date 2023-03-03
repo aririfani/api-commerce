@@ -41,16 +41,16 @@ class EloquentCategoryRepositoryTest extends TestCase
      */
     public function test_update_category_success(): void
     {
-        $category = Category::factory()->make();
+        $category = Category::factory()->create();
 
         $data = $this->repository->update([
-            'name' => $category->name . ' update',
-            'enable' => $category->enable
+            'name'      => $category->name . ' update',
+            'enable'    => $category->enable
         ], $category->id);
 
         $this->assertEquals($category->name . ' update', $data->name);
         $this->assertEquals($category->enable, $data->enable);
-        $this->assertTrue($category->id, $data->id);
+        $this->assertEquals($category->id, $data->id);
     }
 
     public function tearDown(): void
