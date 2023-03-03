@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\EloquentCategoryRepository;
 use App\Services\Category\CategoryService;
+use Illuminate\Support\Facades\Artisan;
 use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -21,10 +22,11 @@ class CategoryServiceTest extends TestCase
 
         $this->categoryRepository   = Mockery::mock(CategoryRepository::class);
         $this->categoryService      = new CategoryService($this->categoryRepository);
+        Artisan::call('migrate:refresh');
     }
 
     /**
-     * A basic unit test example.
+     * test create category success
      */
     public function test_create_category_success(): void
     {
@@ -49,5 +51,37 @@ class CategoryServiceTest extends TestCase
 
         $this->assertEquals('Food', $data->name);
         $this->assertEquals(true, $data->enable);
+    }
+
+    /**
+     * test update category success
+     */
+    public function test_update_category_success(): void
+    {
+        // create category
+        $category = Category::factory()->create();
+
+        // create mock eloquent model
+        $modelMock = Mockery::mock('Illuminate\Database\Eloquent\Model');
+        $modelMock->shouldReceive('getAttribute')->with('id')->andReturn(1);
+        $modelMock->shouldReceive('getAttribute')->with('name')->andReturn('category update');
+        $modelMock->shouldReceive('getAttribute')->with('enable', false)->andReturn(true);
+        
+        $this->categoryRepository
+            ->shouldReceive('update')
+            ->once()
+            ->with([
+                'name'      => 'category update',
+                'enable'    => true
+            ], $modelMock->id)
+            ->andReturn($modelMock);
+
+        $data = $this->categoryService->update([
+            'name'      => 'category update',
+            'enable'    => true
+        ], $category->id);
+
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $data);
+        $this->assertNotEquals($category->name, $data->name);
     }
 }
