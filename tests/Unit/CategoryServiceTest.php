@@ -122,4 +122,22 @@ class CategoryServiceTest extends TestCase
         $this->assertInstanceOf(Collection::class, $data);
         $this->assertCount(4, $data);
     }
+
+    /**
+     * test delete category by id
+     */
+    public function test_delete_category_by_id_success(): void
+    {
+        $category = Category::factory()->create();
+
+        $this->categoryRepository
+            ->shouldReceive('delete')
+            ->once()
+            ->with($category->id)
+            ->andReturn(true);
+
+        $data = $this->categoryService->delete($category->id);
+
+        $this->assertEquals($data, true);
+    }
 }
