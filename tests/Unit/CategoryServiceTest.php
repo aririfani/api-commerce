@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\EloquentCategoryRepository;
 use App\Services\Category\CategoryService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Mockery;
 use Mockery\MockInterface;
@@ -102,5 +103,23 @@ class CategoryServiceTest extends TestCase
 
         $this->assertEquals($category->name, $data->name);
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $data);
+    }
+
+    /**
+     * test get all category success
+     */
+    public function test_get_all_category_success(): void
+    {
+        $category = Category::factory()->count(4)->create();
+        
+        $this->categoryRepository
+            ->shouldReceive('getAll')
+            ->once()
+            ->andReturn($category);
+
+        $data = $this->categoryService->getAll();
+
+        $this->assertInstanceOf(Collection::class, $data);
+        $this->assertCount(4, $data);
     }
 }
