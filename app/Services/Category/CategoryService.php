@@ -3,6 +3,7 @@
 namespace App\Services\Category;
 
 use App\Repositories\Category\CategoryRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -56,5 +57,13 @@ class CategoryService
     public function findById(int $id) : Model
     {
         return $this->categoryRepository->findById($id);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAll(): Collection
+    {
+        return $this->categoryRepository->getAll();
     }
 }
