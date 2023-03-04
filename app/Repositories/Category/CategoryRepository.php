@@ -25,9 +25,15 @@ interface CategoryRepository
     public function update(array $params, int $id): Model;
 
     /**
-     * @param Collection
+     * @return Collection
      */
     public function getAll(): Collection;
+
+    /**
+     * @param int $id
+     * @return Model
+     */
+    public function findById(int $id): Model;
 
     /**
      * @param int $id
