@@ -66,4 +66,13 @@ class CategoryService
     {
         return $this->categoryRepository->getAll();
     }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id): bool
+    {
+        return $this->categoryRepository->delete($id);
+    }
 }
