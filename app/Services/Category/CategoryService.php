@@ -35,4 +35,17 @@ class CategoryService
             'enable'    => $data['enable']
         ]);
     }
+
+    /**
+     * @param array $data
+     * @param int $id
+     * @return Model
+     */
+    public function update(array $data, int $id) : Model
+    {
+        return $this->categoryRepository->update([
+            'name'      => $data['name'],
+            'enable'    => $data['enable'],
+        ], $id);
+    }
 }
