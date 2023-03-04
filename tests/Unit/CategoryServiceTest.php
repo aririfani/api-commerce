@@ -84,4 +84,23 @@ class CategoryServiceTest extends TestCase
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $data);
         $this->assertNotEquals($category->name, $data->name);
     }
+
+    /**
+     * test find by id category success
+     */
+    public function test_find_by_id_category_success(): void
+    {
+        $category = Category::factory()->create();
+
+        $this->categoryRepository
+            ->shouldReceive('findById')
+            ->once()
+            ->with($category->id)
+            ->andReturn($category);
+
+        $data = $this->categoryService->findById($category->id);
+
+        $this->assertEquals($category->name, $data->name);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $data);
+    }
 }
