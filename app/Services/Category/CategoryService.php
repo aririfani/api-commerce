@@ -48,4 +48,13 @@ class CategoryService
             'enable'    => $data['enable'],
         ], $id);
     }
+
+    /**
+     * @param int $id
+     * @return Model
+     */
+    public function findById(int $id) : Model
+    {
+        return $this->categoryRepository->findById($id);
+    }
 }
