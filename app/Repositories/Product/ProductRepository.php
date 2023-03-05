@@ -34,7 +34,7 @@ interface ProductRepository
      * @param int $id
      * @return Model
      */
-    public function findById(int $id): Model;
+    public function findById(int $id): ?Model;
 
     /**
      * @param int $id

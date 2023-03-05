@@ -50,7 +50,7 @@ class EloquentProductRepository implements ProductRepository
      * @param int $id
      * @return Model
      */
-    public function findById(int $id) : Model
+    public function findById(int $id) : ?Model
     {
         return $this->model->where('id','=', $id)->first();
     }
