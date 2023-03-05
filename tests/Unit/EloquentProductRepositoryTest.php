@@ -43,7 +43,7 @@ class EloquentProductRepositoryTest extends TestCase
     /**
      * test update product success
      */
-    public function test_update_product_sucecss(): void
+    public function test_update_product_success(): void
     {
         $product = Product::factory()->create();
 
