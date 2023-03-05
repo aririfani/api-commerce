@@ -9,7 +9,7 @@ use App\Repositories\EloquentAbstractRepository;
  * class EloquentProductImageRepository
  * @package \App\Repositories\ProductImage
  */
-class EloquentProductImageRepository extends EloquentAbstractRepository
+class EloquentProductImageRepository extends EloquentAbstractRepository implements ProductImageRepository
 {
     /**
      * @param \App\Models\ProductImage $model
