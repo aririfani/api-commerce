@@ -6,6 +6,7 @@ use App\Models\Product;
 use Tests\TestCase;
 use App\Repositories\Product\EloquentProductRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Artisan;
 
 class EloquentProductRepositoryTest extends TestCase
@@ -96,6 +97,15 @@ class EloquentProductRepositoryTest extends TestCase
         $data       = $this->repository->delete($product->id);
 
         $this->assertTrue($data);
+    }
+    
+    public function test_get_all_with_paginate(): void
+    {
+        $product = Product::factory()->count(10)->create();
+
+        $data = $this->repository->getAllWithPaginate(10);
+        $this->assertInstanceOf(LengthAwarePaginator::class, $data);
+        $this->assertCount(10, $data);
     }
 
     public function tearDown(): void
