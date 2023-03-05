@@ -7,6 +7,8 @@ use App\Services\Product\ProductService;
 use Mockery;
 use Tests\TestCase;
 use App\Models\Product;
+use App\Repositories\CategoryProduct\CategoryProductRepository;
+use App\Repositories\ProductImage\ProductImageRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -14,13 +16,21 @@ class ProductServiceTest extends TestCase
 {
     private $productRepository;
     private $productService;
+    private $categoryProductRepository;
+    private $productImageRepository;
 
     public function setUp():void
     {
         parent::setUp();
 
-        $this->productRepository    = Mockery::mock(ProductRepository::class);
-        $this->productService       = new ProductService($this->productRepository);
+        $this->productRepository            = Mockery::mock(ProductRepository::class);
+        $this->categoryProductRepository    = Mockery::mock(CategoryProductRepository::class);
+        $this->productImageRepository       = Mockery::mock(ProductImageRepository::class);
+        $this->productService               = new ProductService(
+            $this->productRepository, 
+            $this->categoryProductRepository,
+            $this->productImageRepository
+        );
     }
 
     /**
@@ -31,7 +41,9 @@ class ProductServiceTest extends TestCase
         $product = Product::factory()->make([
             'name'          => 'cake',
             'description'   => 'some description',
-            'enable'        => true
+            'enable'        => true,
+            'categories'    => [],
+            'images'        => [],
         ]);
 
         $this->productRepository
@@ -47,7 +59,9 @@ class ProductServiceTest extends TestCase
         $data = $this->productService->create([
             'name'          => 'cake',
             'description'   => 'some description',
-            'enable'        => true
+            'enable'        => true,
+            'categories'    => [],
+            'images'        => [],
         ]);
 
         $this->assertEquals('cake', $data->name);
@@ -74,14 +88,18 @@ class ProductServiceTest extends TestCase
             ->with([
                 'name'          => 'product update',
                 'description'   => 'description update',
-                'enable'        => false
+                'enable'        => false,
+                'categories'    => [],
+                'images'        => [],
             ], $product->id)
             ->andReturn($modelMock);
 
         $data = $this->productService->update([
             'name'          => 'product update',
             'description'   => 'description update',
-            'enable'        => false
+            'enable'        => false,
+            'categories'    => [],
+            'images'        => [],
         ], $product->id);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $data);
