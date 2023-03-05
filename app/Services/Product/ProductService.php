@@ -54,7 +54,7 @@ class ProductService
      * @param int $id
      * @return Model
      */
-    public function findById(int $id) : Model
+    public function findById(int $id) : ?Model
     {
         return $this->productRepository->findById($id);
     }
