@@ -8,6 +8,7 @@ use Mockery;
 use Tests\TestCase;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductServiceTest extends TestCase
 {
@@ -144,5 +145,27 @@ class ProductServiceTest extends TestCase
         $data = $this->productService->delete($product->id);
 
         $this->assertEquals(true, $data);
+    }
+
+    /**
+     * test get all product with paginate
+     */
+    public function test_get_all_product_with_paginate(): void
+    {
+        $products = Product::factory()->count(10)->create();
+
+        $this->productRepository
+            ->shouldReceive('getAllWithPaginate')
+            ->with(5)
+            ->andReturn(new LengthAwarePaginator(
+                $products->slice(0,5),
+                $products->count(),
+                5,
+                1
+            ));
+            
+        $data = $this->productService->getAllWithPaginate(5);
+
+        $this->assertCount(5, $data);
     }
 }
