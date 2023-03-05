@@ -4,6 +4,7 @@ namespace App\Repositories\Product;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * interface ProductRepository
@@ -40,4 +41,9 @@ interface ProductRepository
      * @return bool
      */
     public function delete(int $id) : bool;
+
+    /**
+     * @param int $id
+     */
+    public function getAllWithPaginate(int $limit): LengthAwarePaginator; 
 }

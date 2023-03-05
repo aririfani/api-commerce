@@ -5,6 +5,7 @@ namespace App\Repositories\Product;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * class EloquentProductRepository
@@ -69,5 +70,13 @@ class EloquentProductRepository implements ProductRepository
     public function getAll(): Collection
     {
         return $this->model->all();
+    }
+
+    /**
+     * @param int $id
+     */
+    public function getAllWithPaginate(int $limit): LengthAwarePaginator
+    {
+        return $this->model->paginate($limit);
     }
 }
