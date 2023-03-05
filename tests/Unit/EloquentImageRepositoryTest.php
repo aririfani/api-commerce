@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Image;
 use Tests\TestCase;
 use App\Repositories\Image\EloquentImageRepository;
+use Illuminate\Support\Facades\Artisan;
 
 class EloquentImageRepositoryTest extends TestCase
 {
@@ -17,7 +18,8 @@ class EloquentImageRepositoryTest extends TestCase
         parent::setUp();
 
         $this->image            = app(Image::class);
-        $this->repository       = app(EloquentImageRepository::class,[$this->image]); 
+        $this->repository       = app(EloquentImageRepository::class,[$this->image]);
+        Artisan::call('migrate:refresh');
     }
 
     /**
