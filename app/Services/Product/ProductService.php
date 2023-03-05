@@ -2,10 +2,13 @@
 
 namespace App\Services\Product;
 
+use App\Repositories\CategoryProduct\CategoryProductRepository;
 use App\Repositories\Product\ProductRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use App\Repositories\ProductImage\ProductImageRepository;
 
 /**
  * class ProductService
@@ -15,12 +18,24 @@ class ProductService
 {
     private $productRepository;
 
+    private $categoryProductRepository;
+
+    private $productImageRepository;
+
     /**
      * @param \App\Repositories\Product\ProductRepository $productRepository
+     * @param \App\Repositories\CategoryProduct\CategoryProductRepository $categoryProductRepository
+     * @param \App\Repositories\ProductImage\ProductImageRepository $productImageRepository
      */
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(
+        ProductRepository $productRepository, 
+        CategoryProductRepository $categoryProductRepository, 
+        ProductImageRepository $productImageRepository
+    )
     {
-        $this->productRepository = $productRepository;
+        $this->productRepository            = $productRepository;
+        $this->categoryProductRepository    = $categoryProductRepository;
+        $this->productImageRepository       = $productImageRepository;
     }
 
     /**
@@ -29,11 +44,46 @@ class ProductService
      */
     public function create(array $data) : Model
     {
-        return $this->productRepository->create([
-            'name'          => $data['name'],
-            'description'   => $data['description'],
-            'enable'        => $data['enable']
-        ]);
+        DB::beginTransaction();
+
+        try {
+            $product = $this->productRepository->create([
+                'name'          => $data['name'],
+                'description'   => $data['description'],
+                'enable'        => $data['enable']
+            ]);
+    
+            if ($data['categories']) {
+                $categoryProduct = [];
+                foreach($data['categories'] as $category) {
+                    $categoryProduct[] = [
+                        'product_id' => $product->id,
+                        'category_id' => $category['id']
+                    ];
+                }
+    
+                $this->categoryProductRepository->insert($categoryProduct);
+            }
+
+            if ($data['images']) {
+                $imageProduct = [];
+                foreach($data['images'] as $image) {
+                    $imageProduct[] = [
+                        'image_id'      => $image['id'],
+                        'product_id'    => $product->id
+                    ];
+                }
+
+                $this->productImageRepository->insert($imageProduct);
+            }
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollBack();
+            throw new \Exception($e->getMessage());
+        }
+
+        return $product;
     }
 
     /**
@@ -43,11 +93,45 @@ class ProductService
      */
     public function update(array $data, int $id) : Model
     {
-        return $this->productRepository->update([
-            'name'          => $data['name'],
-            'description'   => $data['description'],
-            'enable'        => $data['enable'],
-        ], $id);
+        DB::beginTransaction();
+
+        try {
+            $product = $this->productRepository->update([
+                'name'          => $data['name'],
+                'description'   => $data['description'],
+                'enable'        => $data['enable'],
+            ], $id);
+    
+            if ($data['categories']) {
+                $categoryProduct = [];
+                foreach($data['categories'] as $category) {
+                    $categoryProduct[] = [
+                        'product_id' => $product->id,
+                        'category_id' => $category['id']
+                    ];
+                }
+    
+                $this->categoryProductRepository->insert($categoryProduct);
+            }
+
+            if ($data['images']) {
+                $imageProduct = [];
+                foreach($data['images'] as $image) {
+                    $imageProduct[] = [
+                        'image_id'      => $image['id'],
+                        'product_id'    => $product->id
+                    ];
+                }
+
+                $this->productImageRepository->insert($imageProduct);
+            }
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollBack();
+            throw new \Exception($e->getMessage());
+        }
+
+        return $product;
     }
 
     /**

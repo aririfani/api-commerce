@@ -21,7 +21,7 @@ class ProductController extends Controller
     private $service;
 
     /**
-     * @param \App\Services\Product\ProductService $categoryService
+     * @param \App\Services\Product\ProductService $productService
      */
     public function __construct(ProductService $productService)
     {
@@ -45,7 +45,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $data = $this->service->create($request->only('name','description','enable'));
+        $data = $this->service->create($request->only('name','description','enable','categories','images'));
 
         return new ProductResource($data);
     }
@@ -69,7 +69,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = $this->service->update($request->only('name','description','enable'), $id);
+        $data = $this->service->update($request->only('name','description','enable','categories','images'), $id);
 
         return new ProductResource($data);
     }
