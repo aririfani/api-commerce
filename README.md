@@ -5,6 +5,7 @@ This project using laravel 10
 -   [Requirement](#requirement)
 -   [How to configure on your local machine](#how-to-configure-on-your-local-machine)
 -   [How to run using Docker](#how-to-run-using-docker)
+-   [API Documentation](#api-documentation)
 
 ## Requirement
 1. PHP 8.1^
@@ -121,3 +122,7 @@ This project using laravel 10
    ```bash
    $ php artisan test
    ```
+10. access endpoint `localhost:8080`, The server run in port 8080
+
+## API Documentation
+You can find [api documentation here](https://rifaniari.stoplight.io/docs/api-commerce/jxztzem2633hf-api-commerce)
