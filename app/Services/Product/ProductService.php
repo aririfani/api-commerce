@@ -53,7 +53,7 @@ class ProductService
                 'enable'        => $data['enable']
             ]);
     
-            if ($data['categories']) {
+            if (isset($data['categories'])) {
                 $categoryProduct = [];
                 foreach($data['categories'] as $category) {
                     $categoryProduct[] = [
@@ -65,7 +65,7 @@ class ProductService
                 $this->categoryProductRepository->insert($categoryProduct);
             }
 
-            if ($data['images']) {
+            if (isset($data['images'])) {
                 $imageProduct = [];
                 foreach($data['images'] as $image) {
                     $imageProduct[] = [
@@ -102,7 +102,7 @@ class ProductService
                 'enable'        => $data['enable'],
             ], $id);
     
-            if ($data['categories']) {
+            if (isset($data['categories'])) {
                 $categoryProduct = [];
                 foreach($data['categories'] as $category) {
                     $categoryProduct[] = [
@@ -114,7 +114,7 @@ class ProductService
                 $this->categoryProductRepository->insert($categoryProduct);
             }
 
-            if ($data['images']) {
+            if (isset($data['images'])) {
                 $imageProduct = [];
                 foreach($data['images'] as $image) {
                     $imageProduct[] = [
