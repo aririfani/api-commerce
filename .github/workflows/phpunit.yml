@@ -26,7 +26,7 @@ jobs:
       - name: Install dedependencies
         run: composer install --no-interaction
       
-       - name: Prepare the application
+      - name: Prepare the application
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan key:generate
