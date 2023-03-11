@@ -9,7 +9,7 @@ This project using laravel 10
 
 ## Requirement
 1. PHP 8.1^
-2. PostgerSQL
+2. PostgreSQL
 
 ## How to configure on your local machine
 1. Clone this repostory to your local.
