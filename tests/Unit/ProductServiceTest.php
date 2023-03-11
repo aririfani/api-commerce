@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Models\Category;
+use App\Models\Image;
 use App\Repositories\Product\ProductRepository;
 use App\Services\Product\ProductService;
 use Mockery;
@@ -42,26 +44,46 @@ class ProductServiceTest extends TestCase
             'name'          => 'cake',
             'description'   => 'some description',
             'enable'        => true,
-            'categories'    => [],
-            'images'        => [],
         ]);
 
+        $category   = Category::factory()->create();
+        $image      = Image::factory()->create();
+
+        $categoryProduct = [
+            ['id' => $category->id]
+        ];
+
+        $productImage = [
+            ['id' => $image->id]
+        ];
+
         $this->productRepository
-        ->shouldReceive('create')
-        ->once()
-        ->with([
-            'name'          => $product->name,
-            'description'   => $product->description,
-            'enable'        => $product->enable
-        ])
+            ->shouldReceive('create')
+            ->once()
+            ->with([
+                'name'          => $product->name,
+                'description'   => $product->description,
+                'enable'        => $product->enable
+            ])
         ->andReturn($product);
+
+        $this->categoryProductRepository
+            ->shouldReceive('insert')
+            ->once()
+            ->andReturn(true);
+
+        $this->productImageRepository
+            ->shouldReceive('insert')
+            ->once()
+            ->andReturn(true);
+
     
         $data = $this->productService->create([
             'name'          => 'cake',
             'description'   => 'some description',
             'enable'        => true,
-            'categories'    => [],
-            'images'        => [],
+            'categories'    => $categoryProduct,
+            'images'        => $productImage,
         ]);
 
         $this->assertEquals('cake', $data->name);
@@ -74,7 +96,17 @@ class ProductServiceTest extends TestCase
      */
     public function test_update_product_success(): void
     {
-        $product = Product::factory()->create();
+        $product    = Product::factory()->create();
+        $category   = Category::factory()->create();
+        $image      = Image::factory()->create();
+
+        $categoryProduct = [
+            ['id' => $category->id]
+        ];
+
+        $productImage = [
+            ['id' => $image->id]
+        ];
 
         $modelMock = Mockery::mock('Illuminate\Database\Eloquent\Model');
         $modelMock->shouldReceive('getAttribute')->with('id')->andReturn(1);
@@ -89,17 +121,25 @@ class ProductServiceTest extends TestCase
                 'name'          => 'product update',
                 'description'   => 'description update',
                 'enable'        => false,
-                'categories'    => [],
-                'images'        => [],
             ], $product->id)
             ->andReturn($modelMock);
+
+        $this->categoryProductRepository
+            ->shouldReceive('insert')
+            ->once()
+            ->andReturn(true);
+
+        $this->productImageRepository
+            ->shouldReceive('insert')
+            ->once()
+            ->andReturn(true);
 
         $data = $this->productService->update([
             'name'          => 'product update',
             'description'   => 'description update',
             'enable'        => false,
-            'categories'    => [],
-            'images'        => [],
+            'categories'    => $categoryProduct,
+            'images'        => $productImage,
         ], $product->id);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Model', $data);
