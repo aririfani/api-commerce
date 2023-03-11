@@ -42,7 +42,7 @@ class ProductService
      * @param array $data
      * @return Model
      */
-    public function create(array $data) : Model
+    public function create(array $data): ?Model
     {
         DB::beginTransaction();
 
@@ -91,7 +91,7 @@ class ProductService
      * @param int $id
      * @return Model
      */
-    public function update(array $data, int $id) : Model
+    public function update(array $data, int $id): ?Model
     {
         DB::beginTransaction();
 
